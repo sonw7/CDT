@@ -41,6 +41,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -60,6 +61,18 @@ final public class Triangulation_webgl {
     public static List<Vertex> Vertices = new ArrayList<>();
     public static List<String> edgeFlag = new ArrayList<>();
 
+    private static final String BASE_PATH_WINDOWS = "K:\\柯峻伟\\研究生\\web三维建模项目\\数据\\duqu";
+    private static final String BASE_PATH_UNIX = "/Users/kzl/myself/school/CDT";
+
+    private static String determineBasePath() {
+        String os = System.getProperty("os.name").toLowerCase();
+        if (os.contains("win")) {
+            return BASE_PATH_WINDOWS;
+        } else if (os.contains("mac") || os.contains("nix") || os.contains("nux") || os.contains("aix")) {
+            return BASE_PATH_UNIX;
+        }
+        throw new RuntimeException("Unsupported operating system.");
+    }
     /**
      * A private constructor to indicate that instances of this simple
      * demonstration class are not desirable.
@@ -538,7 +551,9 @@ final public class Triangulation_webgl {
 
 
     public static void main(String[] args) throws IOException {
-       // TestOptions options = new TestOptions();
+        String basePath = determineBasePath();
+
+        // TestOptions options = new TestOptions();
         //boolean[] optionsMatched = options.argumentScan(args);
 
      //   Class<?> tinClass = options.getTinClass();//获取tin类
@@ -549,9 +564,11 @@ final public class Triangulation_webgl {
         GeoDataLoader_webgl geoDataLoader = new GeoDataLoader_webgl();
         //GeoDataLoader geoDataLoader = new GeoDataLoader();
 
+        //String drillPathTop = "K:\\柯峻伟\\研究生\\web三维建模项目\\数据\\duqu\\地层0908_已合并钻孔数据\\煤层含水层_钻孔已合并\\3_4\\3bj\\离散点全3.xlsx";//读离散点
+        //String drillPathTop = "/Users/kzl/myself/school/CDT/地层0908_已合并钻孔数据/煤层含水层_钻孔已合并/3_4/3bj/离散点全3.xlsx";//读离散点
+        String drillPathTop = Paths.get(basePath, "地层0908_已合并钻孔数据", "煤层含水层_钻孔已合并", "3_4", "3bj", "离散点全3.xlsx").toString();
 
-        String drillPathTop = "K:\\柯峻伟\\研究生\\web三维建模项目\\数据\\duqu\\地层0908_已合并钻孔数据\\煤层含水层_钻孔已合并\\3_4\\3bj\\离散点全3.xlsx";//读离散点
-       // String drillPathTop = "C:\\Users\\86195\\Desktop\\研究内容\\隔水层刨分\\12与34\\底离散点全.xlsx";//读离散点
+        // String drillPathTop = "C:\\Users\\86195\\Desktop\\研究内容\\隔水层刨分\\12与34\\底离散点全.xlsx";//读离散点
 
         List<Vertex> drillVertices =  geoDataLoader.readGeoVertices(drillPathTop,Vertices);
         for(int i=0;i<drillVertices.size();++i)
@@ -571,7 +588,10 @@ final public class Triangulation_webgl {
 //        List<IConstraint> cListBottom = new ArrayList<>();
         double delta = 0.1;
         List<String> outlinesFilesTop = new ArrayList<>();
-        String outlinesPathTop ="K:\\柯峻伟\\研究生\\web三维建模项目\\数据\\duqu\\地层0908_已合并钻孔数据\\煤层含水层_钻孔已合并\\3_4\\3bj\\io";//批量读外边界文件，应是文件夹路径
+        //String outlinesPathTop ="K:\\柯峻伟\\研究生\\web三维建模项目\\数据\\duqu\\地层0908_已合并钻孔数据\\煤层含水层_钻孔已合并\\3_4\\3bj\\io";//批量读外边界文件，应是文件夹路径
+       //String outlinesPathTop ="/Users/kzl/myself/school/CDT/地层0908_已合并钻孔数据/煤层含水层_钻孔已合并/3_4/3bj/io";//批量读外边界文件，应是文件夹路径
+        String outlinesPathTop = Paths.get(basePath, "地层0908_已合并钻孔数据", "煤层含水层_钻孔已合并", "3_4", "3bj", "io").toString();
+
         geoDataLoader.getFile(outlinesPathTop,outlinesFilesTop);
         for(int i=0;i<outlinesFilesTop.size();++i)
         {
@@ -586,7 +606,10 @@ final public class Triangulation_webgl {
 //读取内边界
 
         List<String> innerlinesFilesTop = new ArrayList<>();
-        String faultPathTop = "K:\\柯峻伟\\研究生\\web三维建模项目\\数据\\duqu\\地层0908_已合并钻孔数据\\煤层含水层_钻孔已合并\\3_4\\3bj\\in";//批量读取内约束，应是文件夹路径
+        //String faultPathTop = "K:\\柯峻伟\\研究生\\web三维建模项目\\数据\\duqu\\地层0908_已合并钻孔数据\\煤层含水层_钻孔已合并\\3_4\\3bj\\in";//批量读取内约束，应是文件夹路径
+        //String faultPathTop = "/Users/kzl/myself/school/CDT/地层0908_已合并钻孔数据/煤层含水层_钻孔已合并/3_4/3bj/in";//批量读取内约束，应是文件夹路径
+        String faultPathTop = Paths.get(basePath, "地层0908_已合并钻孔数据", "煤层含水层_钻孔已合并", "3_4", "3bj", "in").toString();
+
         geoDataLoader.getFile(faultPathTop,innerlinesFilesTop);
         for(int i=0;i<innerlinesFilesTop.size();++i)
         {
