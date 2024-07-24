@@ -5,7 +5,7 @@ import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-//方向向量取值
+//一、方向向量取值
 public class Vector_computation {
 
     public static void main(String[] args) {

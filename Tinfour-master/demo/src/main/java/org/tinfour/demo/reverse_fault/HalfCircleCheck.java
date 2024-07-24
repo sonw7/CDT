@@ -3,7 +3,7 @@ package org.tinfour.demo.reverse_fault;
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
-//半圆内筛选点集
+//二、半圆内筛选点集
 public class HalfCircleCheck {
 
     public static void main(String[] args) {
