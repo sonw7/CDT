@@ -1965,6 +1965,7 @@ public class IncrementalTin implements IIncrementalTin {
       k++;
     }
 
+    //用于精细化
     if (restoreConformity) {
       List<IQuadEdge> eList = edgePool.getEdges();
       for (IQuadEdge e : eList) {

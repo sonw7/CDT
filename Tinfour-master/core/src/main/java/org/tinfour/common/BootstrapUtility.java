@@ -118,17 +118,20 @@ public class BootstrapUtility {
     }
     Vertex[] v = new Vertex[3];
     Vertex[] vtest = new Vertex[3];
+
     int n = list.size();
-    int nTrial = computeNumberOfTrials(n);
+    int nTrial = computeNumberOfTrials(n);//根据顶点数计算一个试验次数
 
     double bestScore = Double.NEGATIVE_INFINITY;
     for (int iTrial = 0; iTrial < nTrial; iTrial++) {
       if (n == 3) {
+        //如果只有三个顶点就用这三个
         vtest[0] = list.get(0);
         vtest[1] = list.get(1);
         vtest[2] = list.get(2);
       } else {
         // pick three unique vertices at random
+        //随机选择三个互不相同的顶点
         for (int i = 0; i < 3; i++) {
           while (true) {
             int index = random.nextInt(n); // (int) (n * random.nextDouble());
@@ -145,10 +148,13 @@ public class BootstrapUtility {
           }
         }
       }
+      //计算当前三个顶点形成的三角形面积
       double a = geoOp.area(vtest[0], vtest[1], vtest[2]);
       if (a == 0) {
+        //如果面积为 0，说明这三个点共线，跳过这次尝试。
         continue;
       } else if (a < 0) {
+        //如果面积为负数，说明三角形顶点的顺序是逆时针排列，通过交换 `vtest[0]` 和 `vtest[2]` 来调整为顺时针方向。
         Vertex swap = vtest[0];
         vtest[0] = vtest[2];
         vtest[2] = swap;
@@ -163,6 +169,7 @@ public class BootstrapUtility {
     }
 
     if (bestScore >= triangleMinAreaThreshold) {
+      //继续尝试，直到找到一个面积大于triangleMinAreaThreshold的三角形为止。
       return v;
     }
 

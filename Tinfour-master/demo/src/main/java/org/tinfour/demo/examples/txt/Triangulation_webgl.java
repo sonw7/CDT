@@ -560,6 +560,7 @@ final public class Triangulation_webgl {
         String title = "Constrained Delaunay Triangulation -- ";//
                // + tinClass.getSimpleName();  //返回名字
 
+        //创建Tin类
         IIncrementalTin tin = new IncrementalTin();
         GeoDataLoader_webgl geoDataLoader = new GeoDataLoader_webgl();
         //GeoDataLoader geoDataLoader = new GeoDataLoader();
@@ -569,13 +570,16 @@ final public class Triangulation_webgl {
         String drillPathTop = Paths.get(basePath, "地层0908_已合并钻孔数据", "煤层含水层_钻孔已合并", "3_4", "3bj", "离散点全3.xlsx").toString();
 
         // String drillPathTop = "C:\\Users\\86195\\Desktop\\研究内容\\隔水层刨分\\12与34\\底离散点全.xlsx";//读离散点
-
+        System.out.println("开始读取离散点文件，坐标转换等");
         List<Vertex> drillVertices =  geoDataLoader.readGeoVertices(drillPathTop,Vertices);
+        //循环加入离散点
         for(int i=0;i<drillVertices.size();++i)
         {
             tin.add(drillVertices.get(i));
         }
-        System.out.println("已经读取并加入离散点");
+        System.out.println("————————————————————————————");
+        System.out.println("已读取并加入全部离散点到tin");
+        System.out.println("————————————————————————————");
 //        String drillPathBottom = "C:\\Users\\86195\\Desktop\\研究内容\\0-23\\0-23\\lsd\\19LSD.xlsx";
 //        List<Vertex> drillVerticesBottom =  geoDataLoader.readGeoVertices(drillPathBottom,Vertices);
 //        for(int i=0;i<drillVerticesBottom.size();++i)
@@ -587,6 +591,7 @@ final public class Triangulation_webgl {
         List<IConstraint> cListTop = new ArrayList<>();
 //        List<IConstraint> cListBottom = new ArrayList<>();
         double delta = 0.1;
+        System.out.println("读取外边界点");
         List<String> outlinesFilesTop = new ArrayList<>();
         //String outlinesPathTop ="K:\\柯峻伟\\研究生\\web三维建模项目\\数据\\duqu\\地层0908_已合并钻孔数据\\煤层含水层_钻孔已合并\\3_4\\3bj\\io";//批量读外边界文件，应是文件夹路径
        //String outlinesPathTop ="/Users/kzl/myself/school/CDT/地层0908_已合并钻孔数据/煤层含水层_钻孔已合并/3_4/3bj/io";//批量读外边界文件，应是文件夹路径
@@ -599,12 +604,14 @@ final public class Triangulation_webgl {
             addOutBounds(outlinesTopVertices,cListTop);
 
         }
+        System.out.println("————————————————————————————");
         System.out.println("已经读取外边界文件");
 
 
 
-//读取内边界
-
+        //读取内边界
+        System.out.println("————————————————————————————");
+        System.out.println("读取外边界文件");
         List<String> innerlinesFilesTop = new ArrayList<>();
         //String faultPathTop = "K:\\柯峻伟\\研究生\\web三维建模项目\\数据\\duqu\\地层0908_已合并钻孔数据\\煤层含水层_钻孔已合并\\3_4\\3bj\\in";//批量读取内约束，应是文件夹路径
         //String faultPathTop = "/Users/kzl/myself/school/CDT/地层0908_已合并钻孔数据/煤层含水层_钻孔已合并/3_4/3bj/in";//批量读取内约束，应是文件夹路径
@@ -617,21 +624,22 @@ final public class Triangulation_webgl {
             addOutBounds(innerlinesTopVertices,cListTop);
 
         }
+        System.out.println("————————————————————————————");
         System.out.println("已经读取内边界文件");
-        System.out.println("已经添加内外约束");
-       //加约束-------------------------------------------------
-        tin.addConstraints(cListTop, true);
 
 
+    //加约束-------------------------------------------------
+        tin.addConstraints(cListTop, false);
+        System.out.println("内外约束都已添加********");
+        System.out.println("————————————————————————————");
         LogoPanel.plot(tin, title);
 
-
-// 坐标的读取
+    // 坐标的读取
         List<Vertex> vertexs = tin.getVertices();
         vertexs.sort(Comparator.comparing(Vertex::getIndex));//对list元素集合根据index升序排序
 
         int vs = vertexs.size();//点总个数
-        int q = tin.getSyntheticVertexCount();//合成点个数
+        int q = tin.getSyntheticVertexCount();//获取合成点个数
         int tv = vs - q;//去除合成点后点总个数
         double[][] vertexcount = new double[vs][4];
         System.out.println("点总个数" + vs + "；其中合成点个数" + q + "；去除合成点后，点总个数" + tv);
